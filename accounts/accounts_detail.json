@@ -1,0 +1,74 @@
+[
+  {
+    "customerId": "customer1",
+    "accountNumber": "12345",
+    "accountType": "SAV",
+    "routingNumber": "11112222",
+    "accountBalance": 19450,
+    "accountStatus": "Active",
+    "firstName": "Manish",
+    "lastName": "Belsare",
+    "accountCreationDate": "2010-01-01",
+    "accountClosureDate": ""
+  },
+  {
+    "customerId": "customer2",
+    "accountNumber": "77777",
+    "accountType": "SAV",
+    "routingNumber": "22334",
+    "accountBalance": 12000,
+    "accountStatus": "Active",
+    "firstName": "Jos",
+    "lastName": "Butler",
+    "accountCreationDate": "2012-02-01",
+    "accountClosureDate": ""
+  },
+  {
+    "customerId": "customer1",
+    "accountNumber": "45321",
+    "accountType": "CHK",
+    "routingNumber": "112050548",
+    "accountBalance": 3500,
+    "accountStatus": "Active",
+    "firstName": "Manish",
+    "lastName": "Belsare",
+    "accountCreationDate": "2009-05-21",
+    "accountClosureDate": ""
+  },
+  {
+    "customerId": "customer3",
+    "accountNumber": "89990",
+    "accountType": "CHK",
+    "routingNumber": "2010578980",
+    "accountBalance": 16300,
+    "accountStatus": "Active",
+    "firstName": "Brian",
+    "lastName": "Kim",
+    "accountCreationDate": "2015-06-01",
+    "accountClosureDate": ""
+  },
+  {
+    "customerId": "customer4",
+    "accountNumber": "67890",
+    "accountType": "CHK",
+    "routingNumber": "212000578",
+    "accountBalance": 0,
+    "accountStatus": "Closed",
+    "firstName": "Nidhi",
+    "lastName": "Mehta",
+    "accountCreationDate": "2013-05-11",
+    "accountClosureDate": "2015-03-22"
+  },
+  {
+    "customerId": "customer5",
+    "accountNumber": "11345",
+    "accountType": "CHK",
+    "routingNumber": "12219009",
+    "accountBalance": 1520,
+    "accountStatus": "Hold",
+    "firstName": "Ricky",
+    "lastName": "Shaw",
+    "accountCreationDate": "2011-02-27",
+    "accountClosureDate": ""
+  }
+]
