@@ -4,7 +4,7 @@
 ###### Prerequisites
 * Scala 12.2 or later
 * sbt 1.0.x
-* RAM >= 8GB (To run all tests successfully)
+* RAM >= 8GB (To run all tests successfully without any JVM issues)
 * POSTMAN or cURL
 
 Build the project
