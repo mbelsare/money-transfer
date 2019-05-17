@@ -1,0 +1,66 @@
+{
+  "actor_system_name": "OrchestratorTest",
+  "host": "0.0.0.0",
+  "port": 8888,
+  "routes": [
+    {
+      "path_prefixes": [
+        "accounts",
+        "transfers",
+        "__accountId__",
+        "money-transfer"
+      ],
+      "health_check_path_prefixes": [
+        "accounts",
+        "transfers",
+        "money-transfer",
+        "health-check"
+      ],
+      "http_verb": "post",
+      "route_index": 1,
+      "default_dag": "dag"
+    }
+  ],
+  "dags": [
+    {
+      "name": "dag",
+      "actors": [
+        {
+          "name": "a",
+          "class_path": "com.revolut.money_transfer.plugins.a"
+        },
+        {
+          "name": "b",
+          "class_path": "com.revolut.money_transfer.plugins.b"
+        },
+        {
+          "name": "c",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations"
+        },
+        {
+          "name": "d",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations"
+        },
+        {
+          "name": "e",
+          "class_path": "com.revolut.money_transfer.plugins.DbInsert"
+        }
+      ],
+      "edges": [
+        {
+          "from": "a",
+          "to": "c"
+        },
+        {
+          "from": "b",
+          "to": "c"
+        },
+        {
+          "from": "c",
+          "to": "d"
+        }
+      ],
+      "required_fields": ["accountId"]
+    }
+  ]
+}

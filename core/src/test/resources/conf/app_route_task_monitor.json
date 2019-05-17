@@ -1,0 +1,55 @@
+{
+  "actor_system_name": "TaskMonitorTest",
+  "host": "127.0.0.1",
+  "port": 8888,
+  "routes": [
+    {
+      "path_prefixes": [
+        "accounts",
+        "transfers",
+        "__accountId__",
+        "money-transfer"
+      ],
+      "health_check_path_prefixes": [
+        "accounts",
+        "transfers",
+        "money-transfer",
+        "health-check"
+      ],
+      "http_verb": "post",
+      "default_dag": "dagname"
+    }
+  ],
+  "dags": [
+    {
+      "name": "dagname",
+      "actors": [
+        {
+          "name": "flattenBody",
+          "class_path": "com.revolut.money_transfer.plugins.BodyFlattener"
+        },
+        {
+          "name": "parser",
+          "class_path": "com.revolut.money_transfer.plugins.GenericParser"
+        },
+        {
+          "name": "db",
+          "class_path": "com.revolut.money_transfer.plugins.DbInsert"
+        }
+      ],
+      "edges": [
+        {
+          "from": "flattenBody",
+          "to": "db"
+        },
+        {
+          "from": "parser",
+          "to": "db"
+        }
+      ],
+      "required_fields": [
+        "accountId"
+      ]
+    }
+  ]
+}

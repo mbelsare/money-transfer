@@ -1,0 +1,54 @@
+{
+  "actor_system_name": "DagTest",
+  "host": "0.0.0.0",
+  "port": 8888,
+  "routes": [
+    {
+      "path_prefixes": [
+        "accounts",
+        "transfers",
+        "__accountId__",
+        "money-transfer"
+      ],
+      "health_check_path_prefixes": [
+        "accounts",
+        "transfers",
+        "money-transfer",
+        "health-check"
+      ],
+      "http_verb": "post",
+      "route_index": 1,
+      "default_dag": "dagTest"
+    }
+  ],
+  "dags": [
+    {
+      "name": "dagTest",
+      "actors": [
+        {
+          "name": "db",
+          "class_path": "com.revolut.money_transfer.plugins.DbInsert"
+        },
+        {
+          "name": "withdraw",
+          "class_path": "com.revolut.money_transfer.plugins.plugins.AccountOperations"
+        },
+        {
+          "name": "deposit",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations"
+        }
+      ],
+      "edges": [
+        {
+          "from": "withdraw",
+          "to": "deposit"
+        },
+        {
+          "from": "deposit",
+          "to": "db"
+        }
+      ],
+      "required_fields": ["accountId"]
+    }
+  ]
+}

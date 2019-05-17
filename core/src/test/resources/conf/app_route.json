@@ -1,0 +1,169 @@
+{
+  "actor_system_name": "RouteGeneratorTest",
+  "host": "127.0.0.1",
+  "port": 8888,
+  "dag_selection_keys": {
+    "selection_keys": ["dagKey"],
+    "values": [
+      {
+        "dag_name": "requiredFieldMissingDag",
+        "keys": {
+          "dagKey": "requiredFieldMissingDag"
+        }
+      },
+      {
+        "dag_name": "alternateDagToDefaultDag",
+        "keys": {
+          "dagKey": "alternateDagToDefaultDag"
+        }
+      }
+    ]
+  },
+  "routes": [
+    {
+      "path_prefixes": [
+        "accounts",
+        "transfers",
+        "__accountId__",
+        "money-transfer"
+      ],
+      "health_check_path_prefixes": [
+        "accounts",
+        "transfers",
+        "money-transfer",
+        "health-check"
+      ],
+      "http_verb": "post",
+      "route_index": 57,
+      "default_dag": "dagwithrenamefields"
+    },
+    {
+      "path_prefixes": [
+        "accounts",
+        "transfers",
+        "__accountId__",
+        "some-endpoint"
+      ],
+      "health_check_path_prefixes": [
+        "accounts",
+        "transfers",
+        "some-endpoint",
+        "health-check"
+      ],
+      "http_verb": "post",
+      "route_index": 57,
+      "default_dag": "dagwithrenamefields2"
+    }
+  ],
+  "dags": [
+    {
+      "name": "dagwithrenamefields",
+      "actors": [
+        {
+          "name": "withdraw",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations",
+          "num_actor_instances": 2
+        },
+        {
+          "name": "deposit",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations",
+          "execution_flags": {
+            "is_skippable": true,
+            "skip_checks": {
+              "withdrawFlag": "false"
+            },
+            "required_keys": [
+              "withdrawFlag"
+            ]
+          },
+          "num_actor_instances": 2
+        },
+        {
+          "name": "db",
+          "class_path": "com.revolut.money_transfer.plugins.DbInsert"
+        }
+      ],
+      "edges": [
+        {
+          "from": "withdraw",
+          "to": "deposit"
+        },
+        {
+          "from": "deposit",
+          "to": "db"
+        }
+      ],
+      "required_fields": [
+        "accountId",
+        "withdrawalAccountBalance",
+        "depositAccountId",
+        "depositAccountBalance",
+        "transactionIdentifier",
+        "status",
+        "errors"
+      ],
+      "rename_fields": {
+        "body.depositAccountId": "depositAccountId",
+        "transactionId": "transactionIdentifier"
+      }
+    },
+    {
+      "name": "requiredFieldMissingDag",
+      "actors": [
+        {
+          "name": "withdraw",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations",
+          "num_actor_instances": 2
+        },
+        {
+          "name": "deposit",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations"
+        }
+      ],
+      "edges": [
+        {
+          "from": "withdraw",
+          "to": "deposit"
+        }
+      ],
+      "required_fields": [
+        "accountNumber",
+        "withdrawalAccountBalance",
+        "body.depositAccountId",
+        "depositAccountBalance",
+        "transactionIdentifier"
+      ]
+    },
+    {
+      "name": "dagwithrenamefields2",
+      "actors": [
+        {
+          "name": "withdraw",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations"
+        },
+        {
+          "name": "deposit",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations"
+        }
+      ],
+      "edges": [
+        {
+          "from": "withdraw",
+          "to": "deposit"
+        }
+      ],
+      "required_fields": [
+        "accountNumber",
+        "depositAccountId",
+        "withdrawalAccountBalance",
+        "depositAccountBalance",
+        "x"
+      ],
+      "rename_fields": {
+        "body.depositAccountId": "depositAccountId",
+        "accountId": "accountNumber",
+        "body.a": "x"
+      }
+    }
+  ]
+}

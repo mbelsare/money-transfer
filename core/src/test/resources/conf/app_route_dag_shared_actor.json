@@ -1,0 +1,101 @@
+{
+  "actor_system_name": "RevolutApp",
+  "host": "0.0.0.0",
+  "port": 8888,
+  "routes": [
+    {
+      "path_prefixes": [
+        "accounts",
+        "transfers",
+        "__accountId__",
+        "money-transfer"
+      ],
+      "health_check_path_prefixes": [
+        "accounts",
+        "transfers",
+        "money-transfer",
+        "health-check"
+      ],
+      "http_verb": "post",
+      "route_index": 1,
+      "default_dag": "dagTest"
+    }
+  ],
+  "dags": [
+    {
+      "name": "dagTest",
+      "actors": [
+        {
+          "name": "db",
+          "class_path": "com.revolut.money_transfer.plugins.DbInsert",
+          "execution_flags": {
+            "is_skippable": true,
+            "skip_checks": {
+              "KEY_1": "VALUE_1",
+              "KEY_2": false
+            }
+          },
+          "execution_configs": {
+            "config1": true,
+            "config2": "foo"
+          }
+        },
+        {
+          "name": "flattenBody",
+          "class_path": "com.revolut.money_transfer.plugins.BodyFlattener",
+          "num_actor_instances": 2
+        }
+      ],
+      "edges": [
+        {
+          "from": "flattenBody",
+          "to": "db"
+        }
+      ],
+      "required_fields": ["accountId"]
+    },
+    {
+      "name": "dagTest2",
+      "actors": [
+        {
+          "name": "db",
+          "class_path": "com.revolut.money_transfer.plugins.DbInsert",
+          "execution_flags": {
+            "is_skippable": false,
+            "skip_checks": {
+              "KEY_1": "VALUE_2",
+              "KEY_2": true
+            }
+          },
+          "execution_configs": {
+            "config1": false,
+            "config2": "bar"
+          }
+        },
+        {
+          "name": "flattenBody",
+          "class_path": "com.revolut.money_transfer.plugins.BodyFlattener",
+          "num_actor_instances": 10
+        }
+      ],
+      "edges": [
+        {
+          "from": "flattenBody",
+          "to": "db"
+        }
+      ],
+      "required_fields": ["accountId"]
+    },
+    {
+      "name": "dagTest3",
+      "actors": [
+        {
+          "name": "db",
+          "class_path": "com.revolut.money_transfer.plugins.DbInsert"
+        }
+      ],
+      "edges": [],
+      "required_fields": ["accountId"]
+    }
+  ]
+}
