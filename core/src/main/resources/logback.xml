@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs\akka.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>45</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- encoders are assigned the type
+         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+            <!--   <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        </encoder>
+    </appender>
+    <appender name="APPLOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/application.log</file>
+        <encoder>
+            <pattern>%highlight(%d{"dd MMM yyyy HH:mm:ss,SSS"} %-5p %-15c{0} [{%X}]: %m%n)</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs\%d{yyy-MM}\app-%d{MM-dd-yyyy}-%i.log.gz</fileNamePattern>
+            <maxFileSize>10000KB</maxFileSize>
+            <maxHistory>45</maxHistory>
+            <totalSizeCap>200MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <appender name="INITLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/init.log</file>
+        <encoder>
+            <pattern>%highlight(%d{"dd MMM yyyy HH:mm:ss,SSS"} %-5p %-15c{0} [{%X}]: %m%n)</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs\%d{yyy-MM}\init-%d{MM-dd-yyyy}-%i.log.gz</fileNamePattern>
+            <maxFileSize>10000KB</maxFileSize>
+            <maxHistory>45</maxHistory>
+            <totalSizeCap>200MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>25000</queueSize>
+        <appender-ref ref="STDOUT" />
+    </appender>
+    <appender name="ASYNCFILE" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>25000</queueSize>
+        <appender-ref ref="FILE" />
+    </appender>
+    <appender name="ASYNCAPPLOGFILE" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>25000</queueSize>
+        <appender-ref ref="APPLOGFILE" />
+    </appender>
+    <logger name="com.revolut.money_transfer.core.app">
+        <appender-ref ref="INITLOG"/>
+    </logger>
+    <logger name="com.revolut.money_transfer.core.utils.APILogger" additivity="false">
+        <appender-ref ref="ASYNCAPPLOGFILE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="ASYNCFILE"/>
+        <appender-ref ref="ASYNCSTDOUT"/>
+    </root>
+</configuration>

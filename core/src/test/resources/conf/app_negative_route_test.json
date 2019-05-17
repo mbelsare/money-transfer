@@ -1,0 +1,38 @@
+{
+  "actor_system_name": "RevolutAppNegativeRouteTest",
+  "host": "127.0.0.1",
+  "port": 8889,
+  "routes": [
+    {
+      "path_prefixes": [
+        "accounts",
+        "transfers",
+        "__accountId__",
+        "money-transfer"
+      ],
+      "health_check_path_prefixes": [
+        "accounts",
+        "transfers",
+        "money-transfer",
+        "health-check"
+      ],
+      "http_verb": "post",
+      "route_index": 56,
+      "default_dag": "test"
+    }
+  ],
+  "dags": [
+    {
+      "name": "test",
+      "actors": [
+        {
+          "name": "withdraw",
+          "class_path": "com.revolut.money_transfer.plugins.AccountOperations1"
+        }
+      ],
+      "edges": [],
+      "required_fields": ["accountId"]
+
+    }
+  ]
+}
