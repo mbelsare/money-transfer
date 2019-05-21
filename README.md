@@ -106,7 +106,7 @@ System Overview
 * `commons` module has common functionality code to support core and business logic execution. Some of commons classes are `ExceptionUtils`, `ValidationUtils`
 * `plugins` module has all the business logic implemented which runs as part of each request. `AccountsOperation` class/actor has all the core business functionality required to withdraw or deposit funds to an account.
 * `core` module is the orchestration layer for the Revolut `money-transfer` app. 
-* The `core` module runs a set of actors that invoke the plugins through `reflection` implemented in `Executor` and `ScalaExecution` classes.<hr />
+* The `core` module runs a set of actors that invoke the plugins through `reflection` implemented in `Executor` and `ScalaExecution` classes.
 * The data model for the accounts table is provided in `data_model` directory of repo's parent path.
 ###### Execution flow
 - The `RevolutApp` in `core` module is the entrypoint that runs the orchestration to build the API route and initialize business actors.
